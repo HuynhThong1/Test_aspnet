@@ -1,0 +1,61 @@
+﻿@model TCS2010PPTG4.Models.Contribution
+
+@{
+    ViewData["Title"] = "Details";
+    var comments = (List<Comment>)ViewData["Comments"];
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Contribution</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Contributor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contributor.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Topic)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Topic.Id)
+        </dd>
+    </dl>
+
+    @foreach (var file in Model.Files)
+    {
+    <div>
+        <a href="@file.URL" download="@file.URL">
+            @file.URL.Split("\\").Last()
+        </a>
+    </div>
+    }
+
+    @if (comments != null)
+    {
+        foreach (var comment in comments)
+        {
+            <div>
+                @comment.User.Email (@comment.Date) : @comment.Content
+            </div>
+        }
+    }
+    <form asp-action="comment">
+        <input type="hidden" name="contributionId" value="@Model.Id" />
+        <textarea name="commentContent"></textarea>
+        <button type="submit">Comment</button>
+    </form>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.809.2
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCS2010PPTG4", "TCS2010PPTG4\TCS2010PPTG4.csproj", "{B2CE1B0F-A3D8-4337-9B8B-17C8460A95B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2CE1B0F-A3D8-4337-9B8B-17C8460A95B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2CE1B0F-A3D8-4337-9B8B-17C8460A95B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2CE1B0F-A3D8-4337-9B8B-17C8460A95B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2CE1B0F-A3D8-4337-9B8B-17C8460A95B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7144C17E-65BD-47CF-A0AA-D7D837CA3F0D}
+	EndGlobalSection
+EndGlobal
