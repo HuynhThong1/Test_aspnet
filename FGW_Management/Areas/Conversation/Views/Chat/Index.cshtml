@@ -1,0 +1,45 @@
+﻿@model IEnumerable<FGW_Management.Models.Chat>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var chats = (List<Chat>)ViewData["Chats"];
+}
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th scope="row">Chat with Thông</th>
+        </tr>
+        <tr>
+            <td scope="row">
+                @if (chats != null)
+                {
+                    foreach (var chat in chats)
+                    {
+                        <div class="input-group row">
+                            <div class="col">
+                                @chat.User.FirstName: @chat.Content
+                            </div>
+                            <form asp-action="DeleteChat" class="mb-2 ml-3">
+                                <input name="chatId" value="@chat.Id" type="hidden" />
+
+                                <div class="col input-group-append">
+                                    <button type="submit" class="btn btn-danger input-group-text"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                }
+                <form asp-action="Chat" class="row ml-2 mr-1">
+                    <textarea class="col-12 col-md-8 col-sm-8 align-self-start" name="chatContent"></textarea>
+                    <button type="submit" class="btn btn-outline-dark col-12 col-sm-3 offset-sm-5 col-md-3 offset-md-5">Send</button>
+
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+

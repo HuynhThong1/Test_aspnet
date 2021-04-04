@@ -420,3 +420,4 @@ C:\Topup_Web\FGW_Management\FGW_Management\obj\Debug\net5.0\Razor\Areas\Coordina
 C:\Topup_Web\FGW_Management\FGW_Management\bin\Debug\net5.0\MailKit.dll
 C:\Topup_Web\FGW_Management\FGW_Management\bin\Debug\net5.0\MimeKit.dll
 C:\Topup_Web\FGW_Management\FGW_Management\bin\Debug\net5.0\BouncyCastle.Crypto.dll
+C:\Topup_Web\FGW_Management\FGW_Management\obj\Debug\net5.0\Razor\Areas\Conversation\Views\Chat\Index.cshtml.g.cs

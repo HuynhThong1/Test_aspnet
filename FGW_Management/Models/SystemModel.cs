@@ -145,5 +145,18 @@ namespace FGW_Management.Models
         public virtual Contribution Contribution { get; set; }
     }
 
+    public class Chat
+    {
+        public int Id { get; set; }
+        public DateTime Date { get; set; }
+        [DisplayName("Chat Content")]
+        public string Content { get; set; }
+
+        [DisplayName("User Name")]
+        public string UserId { get; set; }
+        public virtual FGW_User User { get; set; }
+
+    }
+
 
 }

@@ -20,6 +20,11 @@ namespace FGW_Management.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole("Chat"))
+            {
+                return RedirectToAction("Index", "Chat", new { area = "Conversation" });
+            }
+
             /*
             if (!User.Identity.IsAuthenticated)
             {
