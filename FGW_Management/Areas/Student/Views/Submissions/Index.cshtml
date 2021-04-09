@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FGW_Management.Models.Submission>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-area="" asp-controller="Home">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Topic</li>
+    </ol>
+</nav>
+<table class="table">
+    <thead>
+        <tr class="table-primary">
+            <th scope="row">
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th scope="row">
+                @Html.DisplayNameFor(model => model.CreationDay)
+            </th>
+            <th scope="row">
+                @Html.DisplayNameFor(model => model.SubmissionDeadline_1)
+            </th>
+            <th scope="row">
+                @Html.DisplayNameFor(model => model.SubmissionDeadline_2)
+            </th>
+            <th scope="row"></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmissionDeadline_1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubmissionDeadline_2)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Submit</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

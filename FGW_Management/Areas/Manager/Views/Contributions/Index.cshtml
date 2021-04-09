@@ -1,0 +1,52 @@
+﻿@model IEnumerable<FGW_Management.Models.Contribution>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-area="" asp-controller="Home">Home</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-area="Manager" asp-controller="Submissions">Topics List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Approved Contributions</li>
+    </ol>
+</nav>
+
+<div>
+    <p>Click the button to download file zip contains all contribution's in FGW </p>
+    <a class="btn btn-outline-primary" asp-action="DownloadApprovedFile" asp-route-topicId="@ViewBag.TopicId"><i class="fas fa-download"></i> Download</a>
+</div>
+<table class="table">
+    <thead>
+        <tr class="table-primary">
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contributor)
+            </th>
+            <th class="d-none d-sm-table-cell">
+                @Html.DisplayNameFor(model => model.Submission)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contributor.UserName)
+            </td>
+            <td class="d-none d-sm-table-cell">
+                @Html.DisplayFor(modelItem => item.Submission.Title)
+            </td>
+            <td>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

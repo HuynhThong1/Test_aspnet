@@ -1,0 +1,201 @@
+﻿@model FGW_Management.Models.Submission
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentContribution = (Contribution)ViewData["currentContribution"];
+    var contributorId = ViewData["ContributorId"];
+
+    var contribution = new Contribution();
+    var comments = (List<Comment>)ViewData["Comments"];
+
+    var submissionError = ViewData["Error"];
+}
+
+<div class="mb-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-area="" asp-controller="Home">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" asp-area="Student" asp-controller="Submissions">Topic</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Submission</li>
+        </ol>
+    </nav>
+    <table class="table table-bordered table-hover">
+        <tbody>
+            <tr>
+                <th scope="row">@Html.DisplayNameFor(model => model.Title)</th>
+                <th scope="row">@Html.DisplayFor(model => model.Title)</th>
+            </tr>
+            <tr>
+                <th scope="row">@Html.DisplayNameFor(model => model.CreationDay)</th>
+                <th scope="row">@Html.DisplayFor(model => model.CreationDay)</th>
+            </tr>
+            <tr>
+                <th scope="row">@Html.DisplayNameFor(model => model.SubmissionDeadline_1)</th>
+                <th scope="row">@Html.DisplayFor(model => model.SubmissionDeadline_1)</th>
+            </tr>
+            <tr>
+                <th scope="row">@Html.DisplayNameFor(model => model.SubmissionDeadline_2)</th>
+                <th scope="row">@Html.DisplayFor(model => model.SubmissionDeadline_2)</th>
+            </tr>
+            <tr>
+                @if (currentContribution == null)
+                {
+                    <th scope="row">Submission Status</th>
+                    <th scope="row">No submission yet.</th>
+                }
+                else
+                {
+                    <th scope="row">Submission Status</th>
+                    <th scope="row">@currentContribution.Status</th>
+
+                }
+            </tr>
+            <tr>
+                @if (currentContribution == null)
+                {
+                    <th scope="row">File submissions</th>
+                    <th scope="row"></th>
+                }
+                else
+                {
+                    <th scope="row">File submissions</th>
+                    <th scope="row">
+                        @foreach (var file in currentContribution.SubmittedFiles)
+                        {
+                            <div class="input-group row">
+                                <div class="col">
+                                    <a asp-action="DownloadFile" asp-route-fileId="@file.Id">
+                                        @System.IO.Path.GetFileName(file.URL)
+                                    </a>
+                                </div>
+                                <form asp-action="DeleteUpload" class="mb-2">
+
+                                    <input type="hidden" asp-for="@contribution.ContributorId" value="@ViewBag.ContributorId" />
+                                    <input type="hidden" asp-for="@contribution.SubmissionId" value="@Model.Id" />
+                                    <input type="hidden" asp-for="@currentContribution.ContributorId" value="@ViewBag.ContributorId" />
+                                    <input type="hidden" name="fileId" value="@file.Id" />
+                                    <div class="col input-group-append">
+                                        <button type="submit" class="btn btn-danger input-group-text @(currentContribution.Status == ContributionStatus.Approved ? "d-none" : "")
+                                                                                                 @(Model.SubmissionDeadline_2 < DateTime.Now ? "d-none" : "")">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                    </th>
+
+                }
+
+            </tr>
+            <tr>
+                <th scope="row">Submission comments</th>
+                <th scope="row">
+                    @if (comments != null)
+                    {
+                        foreach (var comment in comments)
+                        {
+                            <div class="input-group row">
+                                <div class="col">
+                                    @comment.User.Email (@comment.Date) : @comment.Content
+                                </div>
+                                <form asp-action="DeleteComment" class="mb-2">
+                                    <input name="commentId" value="@comment.Id" type="hidden" />
+                                    <input type="hidden" asp-for="@contribution.SubmissionId" value="@Model.Id" />
+
+                                    <div class="col input-group-append">
+                                        <button type="submit" class="btn btn-danger input-group-text @(Model.SubmissionDeadline_2 < DateTime.Now ? "d-none" : "")"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        }
+                    }
+                    <form asp-action="comment" class="row ml-2 mr-1 @(Model.SubmissionDeadline_2 < DateTime.Now ? "d-none" : "")">
+                        <input type="hidden" name="topicId" value="@Model.Id" />
+                        <textarea class="col-12 col-md-8 col-sm-8 align-self-start mb-2" name="commentContent"></textarea>
+                        <button type="submit" class="btn btn-outline-dark col-12 col-sm-3 offset-sm-5 col-md-3 offset-md-5">Save comment</button>
+
+                    </form>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+
+    @{
+        var privarcyErrorMessage = @TempData["PrivacyError"];
+    }
+    <div>
+        @privarcyErrorMessage
+    </div>
+
+    <div class="d-flex justify-content-center mb-3">
+        <form asp-action="Upload" enctype="multipart/form-data" class="@(Model.SubmissionDeadline_2 < DateTime.Now ? "d-none" : "")">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@contribution.Status" value="@ContributionStatus.Pending" />
+            <input type="hidden" asp-for="@contribution.ContributorId" value="@ViewBag.ContributorId" />
+            <input type="hidden" asp-for="@contribution.SubmissionId" value="@Model.Id" />
+
+            <div class="form-group">
+                <input type="button" value="Upload Submission" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" />
+            </div>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Upload Submission</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="file" name="file" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" name="privacy" value="true" id="privacy_1">
+                                    </div>
+                                    <p class="form-control">Privacy 01</p>
+                                </div>
+                                <div class="input-group  mb-2">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" name="privacy" value="true" id="privacy_2">
+                                    </div>
+                                    <p class="form-control">Privacy 02</p>
+                                </div>
+                                <div class="input-group  mb-2">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" name="privacy" value="true" id="privacy_3">
+                                    </div>
+                                    <p class="form-control">Privacy 03</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <!--script>
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('New message to ' + recipient)
+            modal.find('.modal-body input').val(recipient)
+
+        })
+    </script-->
+

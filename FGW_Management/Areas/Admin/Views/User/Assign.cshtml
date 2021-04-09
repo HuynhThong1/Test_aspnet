@@ -1,0 +1,87 @@
+﻿@model FGW_Management.Models.FGW_User
+
+@{
+    ViewData["Title"] = "Assign Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-area="" asp-controller="Home">Home</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-area="Admin" asp-controller="User">User List</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Assign</li>
+    </ol>
+</nav>
+
+<h5 class="mt-4 mb-4 text-center">Assign role for @Html.DisplayFor(model => model.UserName) </h5>
+
+@{
+    var currentRoles = (List<Microsoft.AspNetCore.Identity.IdentityRole>)ViewData["currentRoles"];
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover table-striped text-center align-middle">
+                <thead class="table-dark bg-primary">
+                    <tr>
+                        <th>
+                            Role Id
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in currentRoles)
+                    {
+                        <tr>
+                            <td>
+                                @role.Id
+                            </td>
+                            <td>
+                                <form asp-action="DeleteRole">
+                                    <input type="hidden" asp-for="Id" name="userId" />
+                                    <input type="hidden" asp-for="@role.Id" name="roleId" />
+
+                                    <div class="form-group">
+                                        <input type="submit" value="Delete" class="btn btn-danger" />
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="col">
+            <table class="table table-hover table-striped text-center align-middle">
+                <thead class="table-dark bg-primary">
+                    <tr>
+                        <th>
+                            Add Student to this Department
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <form asp-action="AddToRole">
+                                <input type="hidden" asp-for="Id" name="userId" />
+                                @Html.ListBox("remainRoles", null, new { @class = "form-control", multiple = "multiple" })
+
+                                <div class="form-group">
+                                    <br />
+                                    <button type="submit" class="btn btn-primary">Add Roles</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+}
+
+<a asp-action="Index" class="btn btn-outline-primary"><i class="fas fa-arrow-left"></i> Back</a>
+

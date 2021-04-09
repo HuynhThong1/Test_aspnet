@@ -1,0 +1,125 @@
+﻿@model FGW_Management.Models.Contribution
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var comments = (List<Comment>)ViewData["Comments"];
+}
+
+
+<div class="mb-5 container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-area="" asp-controller="Home">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" asp-area="Coordinator" asp-controller="Submissions">Topics</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" asp-area="Coordinator" asp-controller="Contributions" asp-route-submissionId="@Model.SubmissionId">Contributions</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contribution Detail</li>
+        </ol>
+    </nav>
+    <div class="form-group row">
+        <div for="colFormLabelLg" class="col-sm-7 w-100 mb-3">
+            @foreach (var file in Model.SubmittedFiles)
+            {
+                <div class="col mb-2 ">
+                    <a asp-action="DownloadFile" asp-route-fileId="@file.Id">
+                        File Name: @System.IO.Path.GetFileName(file.URL)
+                    </a>
+                </div>
+                <div class="col embed-responsive embed-responsive-4by3" style="height: 855px;">
+                    <iframe src="@System.IO.Path.Combine("/", System.IO.Path.GetDirectoryName(_Global.PATH_TEMP),
+                                  System.IO.Path.GetFileName(_Global.PATH_TEMP),
+                                  System.IO.Path.GetFileNameWithoutExtension(file.URL) + ".pdf").Replace('\\', '/')"
+                            class="embed-responsive-item" allowfullscreen="" frameborder="0" scrolling="auto">
+                    </iframe>
+                </div>
+            }
+        </div>
+        <div class="col-sm-5 w-100">
+            <table class="table table-light table-bordered mb-3">
+                <tr>
+                    <th scope="row">
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th scope="row">
+                        @Html.DisplayFor(model => model.Status)
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.DisplayNameFor(model => model.Contributor)
+                    </th>
+                    <th scope="row">
+                        @Html.DisplayFor(model => model.Contributor.Email)
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.DisplayNameFor(model => model.Submission)
+                    </th>
+                    <th scope="row">
+                        @Html.DisplayFor(model => model.Submission.Title)
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        Grade
+                    </th>
+                    <th scope="row">
+                        <form asp-action="Mark" class="input-group mt-1">
+                            <input type="hidden" name="contributionId" value="@Model.Id" />
+                            <select asp-for="Status" asp-items="Html.GetEnumSelectList<ContributionStatus>()" name="contributionStatus" class="input-group-prepend"></select>
+                            <button type="submit">Save</button>
+                        </form>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="2">
+                        Please give a comment in the blank text.
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2" scope="row">
+                        <form asp-action="comment" class="row mt-2 ml-2 mr-1">
+                            <input type="hidden" name="contributionId" value="@Model.Id" />
+                            <textarea class="align-self-start mb-2 w-100 h-100" name="commentContent"></textarea>
+                            <button type="submit" class="btn btn-outline-dark col-sm-2 col-md-6">Save comment</button>
+                        </form>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="row" colspan="2">
+                        Comment History
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2" scope="row">
+                        @if (comments != null)
+                        {
+                            foreach (var comment in comments)
+                            {
+                                <div class="input-group row">
+                                    <div class="col">
+                                        @comment.User.Email (@comment.Date) : @comment.Content
+                                    </div>
+                                    <form asp-action="DeleteComment" class="mb-2">
+                                        <input name="commentId" value="@comment.Id" type="hidden" />
+
+                                        <div class="col input-group-append">
+                                            <button type="submit" class="btn btn-danger input-group-text"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                        }
+                    </th>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
